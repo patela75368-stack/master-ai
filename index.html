@@ -1,114 +1,23 @@
 <!doctype html>
-<html lang="hi">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#111827">
-<title>Master AI</title>
+<html lang="hi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Master AI - Video Remix</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#f5f7fb;color:#111827}
-header{background:#111827;color:white;padding:22px 18px 26px;border-radius:0 0 24px 24px}
-.logo{font-size:25px;font-weight:800}.tag{opacity:.75;font-size:13px;margin-top:4px}
-.container{max-width:980px;margin:auto;padding:18px}
-.hero{padding:8px 0 18px}.hero h1{font-size:30px;margin:8px 0}.hero p{color:#64748b;margin:0}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-.card{background:white;border:1px solid #e5e7eb;border-radius:18px;padding:18px;box-shadow:0 5px 18px #00000008}
-.card h2{margin:8px 0 5px;font-size:19px}.card p{margin:0 0 14px;color:#64748b;font-size:14px}
-.icon{font-size:30px}.btn{border:0;border-radius:12px;padding:12px 16px;font-weight:700;cursor:pointer;background:#111827;color:white}
-.btn.secondary{background:#eef2ff;color:#3730a3}.btn:disabled{opacity:.5}
-input[type=file]{display:none}.upload{border:2px dashed #cbd5e1;border-radius:15px;padding:24px;text-align:center;background:#f8fafc;cursor:pointer}
-.tool{display:none}.tool.active{display:block}.back{margin-bottom:14px;background:transparent;color:#111827;border:1px solid #cbd5e1}
-.panel{background:white;border:1px solid #e5e7eb;border-radius:18px;padding:18px}
-video{width:100%;max-height:420px;background:#0b1220;border-radius:14px;margin:14px 0}
-.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{margin:12px 0}.field label{display:block;font-weight:700;font-size:13px;margin-bottom:7px}.field select,.field input[type=text],.field input[type=range]{width:100%;padding:11px;border:1px solid #cbd5e1;border-radius:10px;background:white}
-.notice{padding:12px;border-radius:12px;background:#fff7ed;color:#9a3412;font-size:13px;margin:12px 0}
-.progress{height:9px;background:#e5e7eb;border-radius:9px;overflow:hidden;margin-top:12px}.bar{height:100%;width:0;background:#111827;transition:.3s}
-.thumb{width:100%;aspect-ratio:16/9;background:#111827;border-radius:14px;display:flex;align-items:center;justify-content:center;color:white;font-size:clamp(24px,6vw,48px);font-weight:900;text-align:center;padding:20px}
-.result{margin-top:14px;padding:14px;border-radius:12px;background:#f1f5f9}
-footer{text-align:center;color:#64748b;font-size:12px;padding:30px 10px}
-@media(max-width:650px){.grid,.row{grid-template-columns:1fr}.container{padding:14px}.hero h1{font-size:26px}}
-</style>
-</head>
-<body>
-<header><div class="container"><div class="logo">✦ Master AI</div><div class="tag">AI Video Tools • Mobile Friendly</div></div></header>
-
-<main class="container">
-<section id="home" class="screen active">
-  <div class="hero"><h1>अपने वीडियो को बेहतर बनाइए</h1><p>Edit, enhance, thumbnails और copyright-risk analysis — एक ही जगह।</p></div>
-  <div class="grid">
-    <div class="card"><div class="icon">🎬</div><h2>AI Video Remix</h2><p>Trim, crop, resize, text, subtitles और platform formats.</p><button class="btn" onclick="openTool('remix')">Open Remix</button></div>
-    <div class="card"><div class="icon">✨</div><h2>Video Enhancer</h2><p>Quality सुधारने के लिए enhancement controls.</p><button class="btn" onclick="openTool('enhance')">Open Enhancer</button></div>
-    <div class="card"><div class="icon">🖼️</div><h2>Thumbnail Generator</h2><p>YouTube के लिए thumbnail concept और preview.</p><button class="btn" onclick="openTool('thumbnail')">Create Thumbnail</button></div>
-    <div class="card"><div class="icon">©️</div><h2>Copyright Risk Checker</h2><p>संभावित copyright risk की automated assessment.</p><button class="btn" onclick="openTool('copyright')">Check Risk</button></div>
-  </div>
-</section>
-
-<section id="remix" class="tool screen">
-<button class="btn back" onclick="goHome()">← Home</button>
-<div class="panel"><h2>🎬 AI Video Remix</h2>
-<div class="notice">केवल वही video/audio upload करें जिसके आप मालिक हैं या जिसे इस्तेमाल करने की अनुमति है। यह tool copyright detection/Content ID bypass के लिए नहीं है।</div>
-<label class="upload">📤<br><b>Video या Audio चुनें</b><br><small>MP4, MOV, AVI, MKV, MP3, WAV • अधिकतम 2 GB</small><input id="remixFile" type="file" accept="video/*,audio/*" onchange="loadMedia(this)"></label>
-<div id="editor" style="display:none">
-<video id="preview" controls></video>
-<div class="row">
-<div class="field"><label>Platform</label><select><option>YouTube 16:9</option><option>YouTube Shorts 9:16</option><option>Instagram Reels 9:16</option><option>Facebook 16:9</option></select></div>
-<div class="field"><label>Quality</label><select><option>Original / Best available</option><option>High</option><option>Standard</option></select></div>
-</div>
-<div class="row">
-<div class="field"><label>Start (seconds)</label><input id="start" type="range" min="0" max="100" value="0"></div>
-<div class="field"><label>End (seconds)</label><input id="end" type="range" min="0" max="100" value="100"></div>
-</div>
-<div class="actions"><button class="btn secondary">✂️ Trim</button><button class="btn secondary">✂️ Cut/Split</button><button class="btn secondary">🖼️ Crop</button><button class="btn secondary">🔄 Rotate</button><button class="btn secondary">📝 Text</button><button class="btn secondary">💬 Subtitles</button></div>
-<div class="actions"><button class="btn" onclick="simulate('remixProgress')">Process / Export</button></div>
-<div class="progress"><div id="remixProgress" class="bar"></div></div>
-<p id="remixMsg"></p>
-</div></div>
-</section>
-
-<section id="enhance" class="tool screen">
-<button class="btn back" onclick="goHome()">← Home</button>
-<div class="panel"><h2>✨ Video Enhancer</h2>
-<label class="upload">📤<br><b>Video चुनें</b><input id="enhFile" type="file" accept="video/*" onchange="showEnhance(this)"></label>
-<div id="enhanceControls" style="display:none">
-<video id="enhPreview" controls></video>
-<div class="field"><label>Enhancement strength</label><input type="range" min="0" max="100" value="60"></div>
-<div class="actions"><button class="btn secondary">✨ Sharpen</button><button class="btn secondary">🔇 Noise Reduction</button><button class="btn secondary">☀️ Brightness</button><button class="btn secondary">🎧 Audio Enhance</button><button class="btn" onclick="simulate('enhProgress')">Enhance Video</button></div>
-<div class="progress"><div id="enhProgress" class="bar"></div></div>
-<p id="enhMsg"></p></div></div>
-</section>
-
-<section id="thumbnail" class="tool screen">
-<button class="btn back" onclick="goHome()">← Home</button>
-<div class="panel"><h2>🖼️ YouTube Thumbnail Generator</h2>
-<div class="field"><label>Thumbnail title</label><input id="thumbText" type="text" placeholder="अपना आकर्षक वीडियो title लिखें" oninput="updateThumb()"></div>
-<div id="thumb" class="thumb">YOUR THUMBNAIL</div>
-<div class="actions"><button class="btn" onclick="generateThumb()">Generate Variation</button><button class="btn secondary" onclick="saveThumb()">Save / Download</button></div>
-<p id="thumbMsg"></p>
-</div>
-</section>
-
-<section id="copyright" class="tool screen">
-<button class="btn back" onclick="goHome()">← Home</button>
-<div class="panel"><h2>©️ Copyright Risk Checker</h2>
-<div class="notice">यह automated risk assessment है। यह 100% कानूनी copyright clearance या claim-free होने की गारंटी नहीं देता।</div>
-<label class="upload">📤<br><b>Video या Audio चुनें</b><input id="copyFile" type="file" accept="video/*,audio/*" onchange="copyReady(this)"></label>
-<div id="copyArea" style="display:none"><button class="btn" onclick="checkRisk()">Analyze Copyright Risk</button><div class="progress"><div id="copyProgress" class="bar"></div></div><div id="riskResult"></div></div>
-</div>
-</section>
-</main>
-<footer>Master AI • Legitimate editing and copyright-risk assessment</footer>
-
+body{margin:0;font-family:system-ui,sans-serif;background:#f5f7fb;color:#111827}.wrap{max-width:900px;margin:auto;padding:16px}header{background:#111827;color:white}.logo{font-size:24px;font-weight:800} .card{background:white;border:1px solid #ddd;border-radius:18px;padding:18px;margin-top:16px}.upload{display:block;border:2px dashed #bbb;padding:25px;text-align:center;border-radius:15px;cursor:pointer}input[type=file]{display:none}video{width:100%;max-height:430px;background:#000;border-radius:14px;margin-top:15px}.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{margin-top:12px}.field label{display:block;font-weight:700;font-size:13px;margin-bottom:6px}.field input{width:100%;padding:11px;box-sizing:border-box;border:1px solid #bbb;border-radius:10px}button{border:0;border-radius:11px;padding:12px 16px;background:#111827;color:#fff;font-weight:700;margin:5px;cursor:pointer}.secondary{background:#eef2ff;color:#3730a3}.note{background:#fff7ed;color:#9a3412;padding:12px;border-radius:12px;font-size:13px}.hidden{display:none}.msg{margin-top:12px;font-weight:600}@media(max-width:650px){.row{grid-template-columns:1fr}}
+</style></head>
+<body><header><div class="wrap"><div class="logo">✦ Master AI</div>AI Video Remix</div></header>
+<main class="wrap"><div class="card"><h2>🎬 Video Trim + Download</h2>
+<div class="note">केवल अपनी या अधिकृत वीडियो इस्तेमाल करें। यह copyright detection या Content ID bypass नहीं करता। Processing browser में होती है।</div>
+<label class="upload">📤 <b>Video चुनें</b><br><small>पहले छोटी वीडियो से test करें</small><input id="file" type="file" accept="video/*"></label>
+<div id="workspace" class="hidden"><video id="video" controls></video>
+<div class="row"><div class="field"><label>Start (seconds)</label><input id="start" type="number" min="0" value="0" step=".1"></div><div class="field"><label>End (seconds)</label><input id="end" type="number" min="0" value="0" step=".1"></div></div>
+<button class="secondary" onclick="setStart()">Start = current time</button><button class="secondary" onclick="setEnd()">End = current time</button><button onclick="trimVideo()">✂️ Trim & Export</button>
+<div id="status" class="msg"></div><a id="download" class="hidden"><button>⬇️ Download trimmed video</button></a></div></div></main>
 <script>
-function openTool(id){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0)}
-function goHome(){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById('home').classList.add('active');window.scrollTo(0,0)}
-function loadMedia(input){if(!input.files[0])return;const u=URL.createObjectURL(input.files[0]);const v=document.getElementById('preview');v.src=u;document.getElementById('editor').style.display='block'}
-function showEnhance(input){if(!input.files[0])return;document.getElementById('enhPreview').src=URL.createObjectURL(input.files[0]);document.getElementById('enhanceControls').style.display='block'}
-function copyReady(input){if(input.files[0])document.getElementById('copyArea').style.display='block'}
-function simulate(id){let n=0,b=document.getElementById(id);let t=setInterval(()=>{n+=10;b.style.width=n+'%';if(n>=100){clearInterval(t);if(id==='remixProgress')document.getElementById('remixMsg').textContent='Demo processing complete. Real server/AI processing अभी connect करना बाकी है।';else document.getElementById('enhMsg').textContent='Demo enhancement complete. Real AI enhancement engine अभी connect करना बाकी है।'}},150)}
-function updateThumb(){document.getElementById('thumb').textContent=document.getElementById('thumbText').value||'YOUR THUMBNAIL'}
-function generateThumb(){let a=['🔥 MUST WATCH','NEW VIDEO','TOP TIPS','AMAZING RESULTS'];document.getElementById('thumb').textContent=a[Math.floor(Math.random()*a.length)];document.getElementById('thumbMsg').textContent='Thumbnail concept generated.'}
-function saveThumb(){alert('इस शुरुआती version में browser image export बाद में जोड़ेंगे।')}
-function checkRisk(){let b=document.getElementById('copyProgress'),n=0;let t=setInterval(()=>{n+=10;b.style.width=n+'%';if(n>=100){clearInterval(t);document.getElementById('riskResult').innerHTML='<div class="result"><b>Preliminary result: Review Required</b><br>यह demo केवल interface दिखाता है। वास्तविक audio/video fingerprint database और licensed detection service जोड़ने के बाद detailed risk analysis मिलेगा।</div>'}},120)}
-</script>
-</body>
-</html>
+const fi=document.getElementById('file'),v=document.getElementById('video'),w=document.getElementById('workspace'),s=document.getElementById('start'),e=document.getElementById('end'),msg=document.getElementById('status');
+fi.onchange=()=>{let f=fi.files[0];if(!f)return;v.src=URL.createObjectURL(f);w.classList.remove('hidden');v.onloadedmetadata=()=>{s.value=0;e.value=v.duration.toFixed(1)};msg.textContent='वीडियो तैयार है।'};
+function setStart(){s.value=v.currentTime.toFixed(1)} function setEnd(){e.value=v.currentTime.toFixed(1)}
+async function trimVideo(){let a=Number(s.value),b=Number(e.value);if(!(b>a)){msg.textContent='End time, Start से बड़ा होना चाहिए।';return}if(!window.MediaRecorder||!HTMLCanvasElement.prototype.captureStream){msg.textContent='इस browser में local export उपलब्ध नहीं है। Chrome का नया version आज़माएँ।';return}
+let c=document.createElement('canvas');c.width=v.videoWidth||1280;c.height=v.videoHeight||720;let x=c.getContext('2d'),stream=c.captureStream(30),r=new MediaRecorder(stream,{mimeType:'video/webm'}),chunks=[];
+r.ondataavailable=q=>{if(q.data.size)chunks.push(q.data)};r.onstop=()=>{let blob=new Blob(chunks,{type:'video/webm'}),u=URL.createObjectURL(blob),d=document.getElementById('download');d.href=u;d.download='master-ai-trimmed.webm';d.classList.remove('hidden');msg.textContent='Trim complete! Download दबाएँ।'};
+msg.textContent='Processing…';v.currentTime=a;await new Promise(q=>v.onseeked=q);r.start();v.play();
+function draw(){if(!v.paused){x.drawImage(v,0,0,c.width,c.height);requestAnimationFrame(draw)}}draw();setTimeout(()=>{v.pause();r.stop()},(b-a)*1000)}
+</script></body></html>
