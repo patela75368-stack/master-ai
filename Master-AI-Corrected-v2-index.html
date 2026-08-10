@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111827">
+<title>Master AI Video Tools</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#f4f6f8;color:#111827}
+header{background:#111827;color:#fff;padding:18px 16px}.wrap{max-width:950px;margin:auto;padding:16px}
+.logo{font-size:25px;font-weight:800}.tag{opacity:.85;font-size:14px}.screen{display:none}.screen.active{display:block}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.card,.panel{background:#fff;border:1px solid #e5e7eb;border-radius:18px;padding:18px;margin-top:14px}
+.card h2{margin:7px 0}.card p{color:#64748b;font-size:14px}.icon{font-size:30px}
+.btn{border:0;border-radius:11px;padding:12px 16px;background:#111827;color:#fff;font-weight:700;cursor:pointer;margin:4px}.secondary{background:#eef2ff;color:#3730a3}
+.upload{display:block;border:2px dashed #cbd5e1;padding:24px;text-align:center;border-radius:15px;cursor:pointer;background:#f8fafc;margin-top:12px}
+input[type=file]{display:none}video{width:100%;max-height:420px;background:#000;border-radius:14px;margin-top:14px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{margin-top:12px}.field label{display:block;font-size:13px;font-weight:700;margin-bottom:6px}
+.field input[type=number],.field input[type=text],.field select{width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:9px}.field input[type=range]{width:100%}
+.note{background:#fff7ed;color:#9a3412;padding:12px;border-radius:12px;font-size:13px;margin:12px 0}.msg{font-weight:650;margin-top:10px}.hidden{display:none}
+canvas{max-width:100%;width:100%;border-radius:12px;background:#111827;margin-top:12px}.risk{padding:16px;border-radius:12px;background:#f1f5f9;margin-top:12px}
+.progress{height:16px;background:#e5e7eb;border-radius:20px;overflow:hidden;margin:8px 0}.bar{height:100%;transition:width .5s}
+.highlight{border:2px solid #ef4444;background:#fff1f2;padding:14px;border-radius:12px}.ok{border:2px solid #16a34a;background:#f0fdf4;padding:14px;border-radius:12px}
+@media(max-width:650px){.grid,.row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><div class="logo">✦ Master AI</div><div class="tag">AI Video Tools • Mobile Friendly</div></div></header>
+<main class="wrap">
+
+<section id="home" class="screen active">
+<h1>अपने वीडियो को बेहतर बनाइए</h1>
+<p>Edit, enhance, thumbnails और copyright-risk analysis — एक ही जगह।</p>
+<div class="grid">
+<div class="card"><div class="icon">🎬</div><h2>AI Video Remix</h2><p>Speed, visual effects, trim और preview.</p><button class="btn" onclick="openScreen('remix')">Open Remix</button></div>
+<div class="card"><div class="icon">✨</div><h2>Video Enhancer</h2><p>2K/4K target, quality controls और download.</p><button class="btn" onclick="openScreen('enhance')">Open Enhancer</button></div>
+<div class="card"><div class="icon">🖼️</div><h2>Thumbnail Generator</h2><p>Font style, font size और text effects.</p><button class="btn" onclick="openScreen('thumbnail')">Create Thumbnail</button></div>
+<div class="card"><div class="icon">©️</div><h2>Copyright Risk Checker</h2><p>Risk percentage और detailed results page.</p><button class="btn" onclick="openScreen('copyright')">Check Risk</button></div>
+</div></section>
+
+<section id="remix" class="screen">
+<button class="btn secondary" onclick="openScreen('home')">← Home</button>
+<div class="panel"><h2>🎬 Video Remix</h2>
+<div class="note">केवल अपनी या अधिकृत सामग्री इस्तेमाल करें। ये controls copyright detection या Content ID bypass के लिए नहीं हैं।</div>
+<label class="upload">📤 <b>Video चुनें</b><br><small>अपनी छोटी वीडियो से test करें</small><input id="rfile" type="file" accept="video/*"></label>
+<div id="rwork" class="hidden"><video id="rvideo" controls playsinline></video>
+<div class="row">
+<div class="field"><label>Playback Speed</label><select id="rspeed"><option value=".5">0.5× बहुत धीमा</option><option value=".75">0.75× धीमा</option><option value="1" selected>1× सामान्य</option><option value="1.25">1.25× तेज</option><option value="1.5">1.5× तेज</option><option value="2">2× बहुत तेज</option></select></div>
+<div class="field"><label>Visual Effect</label><select id="reffect"><option value="none">Normal</option><option value="cinema">Cinematic</option><option value="vivid">Vivid</option><option value="soft">Soft</option><option value="mono">Black & White</option></select></div>
+</div>
+<div class="field"><label>Audio Reverb (preview)</label><select id="rreverb"><option>Off</option><option>Light</option><option>Medium</option><option>Strong</option></select></div>
+<div class="row"><div class="field"><label>Start (seconds)</label><input id="rstart" type="number" min="0" value="0" step=".1"></div><div class="field"><label>End (seconds)</label><input id="rend" type="number" min="0" value="0" step=".1"></div></div>
+<button class="btn secondary" onclick="setRStart()">Start = current time</button><button class="btn secondary" onclick="setREnd()">End = current time</button>
+<button class="btn" onclick="previewRemix()">▶ Apply Preview</button><button class="btn" onclick="exportRemix()">✂️ Export Remix</button>
+<div id="rmsg" class="msg"></div><a id="rdownload" class="hidden"><button class="btn">⬇️ Download Remix</button></a>
+</div></div></section>
+
+<section id="enhance" class="screen">
+<button class="btn secondary" onclick="openScreen('home')">← Home</button>
+<div class="panel"><h2>✨ Video Enhancer</h2>
+<div class="note">2K/4K यहाँ target resolution है; वास्तविक AI detail recovery के लिए server-side AI upscaler जरूरी होगा। Browser export device/browser पर निर्भर है।</div>
+<label class="upload">📤 <b>Video चुनें</b><input id="efile" type="file" accept="video/*"></label>
+<div id="ework" class="hidden"><video id="evideo" controls playsinline></video>
+<div class="row"><div class="field"><label>Target Quality</label><select id="eq"><option value="original">Original</option><option value="2k">2K (2560×1440)</option><option value="4k">4K (3840×2160)</option></select></div><div class="field"><label>Export Format</label><select id="efmt"><option>WebM</option></select></div></div>
+<div class="field"><label>Brightness</label><input id="ebright" type="range" min="-40" max="40" value="0"></div>
+<div class="field"><label>Contrast</label><input id="econtrast" type="range" min="60" max="150" value="100"></div>
+<div class="field"><label>Saturation</label><input id="esat" type="range" min="50" max="160" value="100"></div>
+<button class="btn" onclick="applyEnhance()">✨ Apply Preview</button><button class="btn secondary" onclick="resetEnhance()">Reset</button><button class="btn" onclick="exportEnhance()">⬇️ Enhance & Download</button>
+<div id="emsg" class="msg"></div><a id="edownload" class="hidden"><button class="btn">Download Enhanced Video</button></a>
+</div></div></section>
+
+<section id="thumbnail" class="screen">
+<button class="btn secondary" onclick="openScreen('home')">← Home</button>
+<div class="panel"><h2>🖼️ YouTube Thumbnail Generator</h2>
+<label class="upload">📷 <b>Image चुनें</b><input id="tfile" type="file" accept="image/*"></label>
+<div class="field"><label>Thumbnail Text</label><input id="ttext" type="text" placeholder="अपना YouTube title लिखें"></div>
+<div class="row"><div class="field"><label>Font Style</label><select id="tfont"><option value="Arial">Arial</option><option value="Impact">Impact</option><option value="Georgia">Georgia</option><option value="Trebuchet MS">Trebuchet MS</option><option value="Courier New">Courier New</option></select></div><div class="field"><label>Font Size</label><input id="tsize" type="range" min="24" max="110" value="60"></div></div>
+<div class="row"><div class="field"><label>Font Weight</label><select id="tweight"><option value="800">Extra Bold</option><option value="700">Bold</option><option value="600">Semi Bold</option><option value="400">Normal</option></select></div><div class="field"><label>Text Effect</label><select id="teffect"><option value="outline">Outline</option><option value="shadow">Shadow</option><option value="plain">Plain</option></select></div></div>
+<button class="btn" onclick="makeThumb()">🖼️ Generate Preview</button><button class="btn secondary" onclick="downloadThumb()">⬇️ Download Thumbnail</button>
+<canvas id="thumb" width="1280" height="720"></canvas><div id="tmsg" class="msg"></div>
+</div></section>
+
+<section id="copyright" class="screen">
+<button class="btn secondary" onclick="openScreen('home')">← Home</button>
+<div class="panel"><h2>©️ Copyright Risk Checker</h2>
+<div class="note">यह browser-only preliminary assessment है। वास्तविक copyright database/Content ID matching के बिना किसी video को copyrighted या copyright-free कहना विश्वसनीय नहीं है।</div>
+<label class="upload">🎥 <b>Video/Audio चुनें</b><input id="cfile" type="file" accept="video/*,audio/*"></label>
+<button class="btn" onclick="startRiskCheck()">🔎 Analyze & Open Detailed Report</button>
+</div></section>
+
+<section id="riskReport" class="screen">
+<button class="btn secondary" onclick="openScreen('copyright')">← Back</button>
+<div class="panel"><h2>📊 Copyright Risk Detailed Report</h2><div id="riskResult"></div></div>
+</section>
+
+</main>
+
+<script>
+function openScreen(id){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');scrollTo(0,0)}
+
+const rf=document.getElementById('rfile'),rv=document.getElementById('rvideo'),rw=document.getElementById('rwork'),rs=document.getElementById('rstart'),re=document.getElementById('rend'),rm=document.getElementById('rmsg'),rd=document.getElementById('rdownload');
+rf.onchange=()=>{const f=rf.files[0];if(!f)return;rv.src=URL.createObjectURL(f);rw.classList.remove('hidden');rv.onloadedmetadata=()=>{rs.value=0;re.value=rv.duration.toFixed(1)};rm.textContent='वीडियो तैयार है। Speed 1× सामान्य है।'};
+document.getElementById('rspeed').onchange=e=>rv.playbackRate=Number(e.target.value);
+function setRStart(){rs.value=rv.currentTime.toFixed(1)}
+function setREnd(){re.value=rv.currentTime.toFixed(1)}
+function applyVisual(){const f=document.getElementById('reffect').value;const map={none:'none',cinema:'contrast(115%) saturate(85%) brightness(95%)',vivid:'contrast(120%) saturate(145%)',soft:'contrast(92%) saturate(90%) brightness(105%)',mono:'grayscale(100%)'};rv.style.filter=map[f]}
+function previewRemix(){rv.playbackRate=Number(document.getElementById('rspeed').value);applyVisual();rm.textContent='Speed और visual effect preview लागू हो गया। Reverb अभी preview setting है।'}
+async function exportRemix(){const a=+rs.value,b=+re.value;if(!(b>a)){rm.textContent='End time, Start से बड़ा होना चाहिए।';return}if(!HTMLCanvasElement.prototype.captureStream||!window.MediaRecorder){rm.textContent='इस browser में local export उपलब्ध नहीं है।';return}const c=document.createElement('canvas');c.width=rv.videoWidth||1280;c.height=rv.videoHeight||720;const x=c.getContext('2d'),s=c.captureStream(30),r=new MediaRecorder(s,{mimeType:'video/webm'}),chunks=[];r.ondataavailable=e=>e.data.size&&chunks.push(e.data);r.onstop=()=>{const u=URL.createObjectURL(new Blob(chunks,{type:'video/webm'}));rd.href=u;rd.download='master-ai-remix.webm';rd.classList.remove('hidden');rm.textContent='Remix complete! Download दबाएँ।'};rm.textContent='Remix processing…';rv.currentTime=a;await new Promise(q=>rv.onseeked=q);rv.playbackRate=Number(document.getElementById('rspeed').value);applyVisual();r.start();rv.play();function d(){if(!rv.paused){x.drawImage(rv,0,0,c.width,c.height);requestAnimationFrame(d)}}d();setTimeout(()=>{rv.pause();r.stop()},Math.max(700,(b-a)*1000/Number(document.getElementById('rspeed').value)))}
+
+const ef=document.getElementById('efile'),ev=document.getElementById('evideo'),ew=document.getElementById('ework'),em=document.getElementById('emsg');
+ef.onchange=()=>{const f=ef.files[0];if(!f)return;ev.src=URL.createObjectURL(f);ew.classList.remove('hidden');em.textContent='वीडियो तैयार है।'};
+function enhanceFilter(){ev.style.filter='brightness('+(100+ +document.getElementById('ebright').value)+'%) contrast('+document.getElementById('econtrast').value+'%) saturate('+document.getElementById('esat').value+'%)'}
+function applyEnhance(){enhanceFilter();em.textContent='Enhancement preview लागू हो गया।'}
+function resetEnhance(){document.getElementById('ebright').value=0;document.getElementById('econtrast').value=100;document.getElementById('esat').value=100;ev.style.filter='none';em.textContent='Reset हो गया।'}
+async function exportEnhance(){if(!ev.videoWidth){em.textContent='पहले वीडियो चुनें।';return}if(!HTMLCanvasElement.prototype.captureStream||!window.MediaRecorder){em.textContent='इस browser में local export उपलब्ध नहीं है।';return}const q=document.getElementById('eq').value;let w=ev.videoWidth,h=ev.videoHeight;if(q==='2k'){w=2560;h=1440}if(q==='4k'){w=3840;h=2160}const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');const s=c.captureStream(30);const r=new MediaRecorder(s,{mimeType:'video/webm'}),chunks=[];r.ondataavailable=e=>e.data.size&&chunks.push(e.data);r.onstop=()=>{const u=URL.createObjectURL(new Blob(chunks,{type:'video/webm'}));const a=document.getElementById('edownload');a.href=u;a.download='master-ai-enhanced-'+q+'.webm';a.classList.remove('hidden');em.textContent='Enhanced export तैयार है। Download दबाएँ।'};em.textContent='Processing '+q+'…';enhanceFilter();ev.currentTime=0;await new Promise(q=>ev.onseeked=q);r.start();ev.play();function d(){if(!ev.paused){x.filter=getComputedStyle(ev).filter;x.drawImage(ev,0,0,w,h);requestAnimationFrame(d)}}d();setTimeout(()=>{ev.pause();r.stop()},Math.max(1000,(ev.duration||5)*1000))}
+
+const tf=document.getElementById('tfile'),tc=document.getElementById('thumb'),tx=tc.getContext('2d'),tt=document.getElementById('ttext'),ts=document.getElementById('tsize'),tm=document.getElementById('tmsg');let thumbImage=null;
+tf.onchange=()=>{const f=tf.files[0];if(!f)return;const i=new Image();i.onload=()=>{thumbImage=i;makeThumb()};i.src=URL.createObjectURL(f)}
+function makeThumb(){tx.clearRect(0,0,1280,720);if(thumbImage){const z=Math.max(1280/thumbImage.width,720/thumbImage.height),w=thumbImage.width*z,h=thumbImage.height*z;tx.drawImage(thumbImage,(1280-w)/2,(720-h)/2,w,h)}else{tx.fillStyle='#111827';tx.fillRect(0,0,1280,720)}tx.fillStyle='rgba(0,0,0,.38)';tx.fillRect(0,0,1280,720);tx.textAlign='center';tx.textBaseline='middle';const font=document.getElementById('tfont').value,weight=document.getElementById('tweight').value,size=ts.value,effect=document.getElementById('teffect').value,text=tt.value||'YOUR YOUTUBE TITLE';tx.font=weight+' '+size+'px "'+font+'"';tx.fillStyle='white';tx.shadowColor='transparent';tx.shadowBlur=0;if(effect==='outline'){tx.strokeStyle='black';tx.lineWidth=12;tx.strokeText(text,640,360)}if(effect==='shadow'){tx.shadowColor='black';tx.shadowBlur=14;tx.shadowOffsetX=6;tx.shadowOffsetY=6}tx.fillText(text,640,360);tx.shadowColor='transparent';tm.textContent='Thumbnail preview तैयार है।'}
+function downloadThumb(){makeThumb();const a=document.createElement('a');a.href=tc.toDataURL('image/jpeg',.92);a.download='master-ai-thumbnail.jpg';a.click()}
+
+function startRiskCheck(){const f=document.getElementById('cfile').files[0];if(!f){alert('पहले video/audio चुनें।');return}openScreen('riskReport');const result=document.getElementById('riskResult');result.innerHTML='<p>🔎 File analysis चल रहा है…</p>';setTimeout(()=>{const name=f.name.toLowerCase();let risk=25,reasons=[];if(/\.(mp3|wav|m4a|aac|flac)$/.test(name)){risk+=20;reasons.push('Audio-only file है; music/recording ownership verify करें।')}if(/(song|music|movie|film|official|trailer|reel|short)/.test(name)){risk+=35;reasons.push('Filename में music/movie/official जैसे संकेत हैं।')}if(f.size>50*1024*1024){risk+=10;reasons.push('Large media file है; ownership manually verify करें।')}risk=Math.min(risk,95);const level=risk>=70?'HIGH':risk>=40?'MEDIUM':'LOW';const cls=risk>=40?'highlight':'ok';result.innerHTML='<div class="'+cls+'"><h2>'+level+' RISK — '+risk+'%</h2><div class="progress"><div class="bar" style="width:'+risk+'%;background:'+(risk>=70?'#ef4444':'#f59e0b')+'"></div></div><p><b>Preliminary risk score:</b> '+risk+'%</p><p>यह वास्तविक copyright database match नहीं है। Browser-only checker copyright ownership साबित नहीं कर सकता।</p></div><div class="panel"><h3>⚠️ Risk indicators</h3><ul>'+(reasons.length?reasons.map(x=>'<li>'+x+'</li>').join(''):'<li>Filename-based high-risk संकेत नहीं मिले। फिर भी ownership verify करें।')+'</ul></div><div class="panel"><h3>वास्तविक checking के लिए</h3><p>Licensed fingerprint/rights database API जोड़ने पर audio/video matching और वास्तविक claims-risk analysis किया जा सकता है।</p></div>'},1200)}
+</script>
+</body>
+</html>
